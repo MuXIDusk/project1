@@ -1,0 +1,132 @@
+//CStudent.h
+#pragma once 
+#include<string>
+using namespace std;
+class CStudent
+{
+protected:
+	int num, age;
+	string name;
+	char sex;
+public:
+	CStudent() {}
+	CStudent(int a, int n, string na, char s) :age(a), num(n), name(na),sex(s) { }
+	virtual void display();
+};
+//CStudent.cpp
+#include "CStudent.h"
+#include<iostream>
+#include<string>
+using namespace std;
+
+void CStudent::display()
+{
+	cout << "Name:" << name << "\nSex:" << sex << "\nNum:" << num << "\nAge:" << age << endl;
+}
+//CPrimaryStudent.h
+#pragma once
+#include"CStudent.h"
+#include<string>
+using namespace std;
+class CPrimaryStudent:public CStudent
+{
+public:
+	CPrimaryStudent() {}
+	CPrimaryStudent(int a, int n, string na, char s):CStudent(a,n,na,s){}
+	virtual void display();
+};
+//CPrimaryStudent.cpp
+#include "CPrimaryStudent.h"
+#include<iostream>
+#include<string>
+using namespace std;
+void CPrimaryStudent::display()
+{
+	cout << name <<" is a PrimaryStudent" << endl;
+	CStudent::display();	
+}
+//CMiddleStudent.h
+#pragma once
+#include"CPrimaryStudent.h"
+#include<string>
+using namespace std;
+class CMiddleStudent:public CPrimaryStudent
+{
+public:
+	CMiddleStudent() {}
+	CMiddleStudent(int a, int n, string na, char s) :CPrimaryStudent(a, n, na, s) {}
+	virtual void display();
+};
+//CMiddleStudent.cpp
+#include "CMiddleStudent.h"
+#include<iostream>
+#include<string>
+using namespace std;
+void CMiddleStudent::display()
+{
+	cout << name << " is a MiddleStudent" << endl;
+	CStudent::display();
+}
+//CCollegeStudent.h
+#include"CMiddleStudent.h"
+#include<string>
+using namespace std;
+class CCollegeStudent:public CMiddleStudent
+{
+public:
+	CCollegeStudent() {}
+	CCollegeStudent(int a, int n, string na, char s) :CMiddleStudent(a, n, na, s) {}
+	void display();
+};
+//CCollegeStudent.cpp
+#include "CCollegeStudent.h"
+#include<iostream>
+#include<string>
+using namespace std;
+void CCollegeStudent::display()
+{
+	cout << name << " is a CollegeStudent" << endl;
+	CStudent::display();
+}
+//源.cpp
+#include<iostream>
+#include<string>
+#include"CCollegeStudent.h"
+#include"CMiddleStudent.h"
+#include"CPrimaryStudent.h"
+using namespace std;
+int main()
+{
+	int num, age;
+	string name;
+	char sex;
+	CStudent *stu[5];
+	for (int n = 0; n < 5; n++)
+	{
+		cout << "Please input name,id,age,sex" << endl;
+		cin >> name >> num >> age >> sex;
+		if (age <= 11 && age >= 6)
+		{
+			CPrimaryStudent s1(age, num, name, sex);
+			stu[n] = &s1;
+		}
+		else if (age <= 17 && age > 11)
+		{
+			CMiddleStudent s1(age, num, name, sex);
+			stu[n] = &s1;
+		}
+		else if (age > 17 && age <=23)
+		{
+			CCollegeStudent s1(age, num, name, sex);
+			stu[n] = &s1;
+		}
+		else
+		{
+			cout << name << "isn't a student" << endl;
+		}
+	}
+	for (int n = 0; n < 5; n++)
+	{
+		stu[n]->display();
+	}
+}
